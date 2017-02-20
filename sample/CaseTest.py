@@ -1,7 +1,7 @@
 #!/usr/bin/py
 
 
-class TestProblem:
+class CaseTest:
 
     def __init__(self, input_text, output_text):
         self.input_text = input_text
