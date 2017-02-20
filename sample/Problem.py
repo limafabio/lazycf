@@ -9,3 +9,7 @@ class Problem(Entity):
         Entity.__init__(self, id_obj, name)
         self.description = description
         self.url = url
+        self.contest = None
+
+    def add_contest(self, contest):
+        self.contest = contest
