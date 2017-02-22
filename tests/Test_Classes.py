@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath('..'))
 from sample.Entity import Entity
 from sample.Problem import Problem
 from sample.Contest import Contest
-from sample.CaseTest import CaseTest
+from sample.TestCase import TestCase
 
 
 class TestClasses(unittest.TestCase):
@@ -25,9 +25,9 @@ class TestClasses(unittest.TestCase):
         self.assertEqual(str(contest_test.__class__), "sample.Contest.Contest")
 
     def test_case_test_init(self):
-        case_test = CaseTest('input', 'output')
+        case_test = TestCase('input', 'output')
         self.assertEqual(str(case_test.__class__),
-                         "sample.CaseTest.CaseTest")
+                         "sample.TestCase.TestCase")
 
     def test_problem_add_contest(self):
         problem_test = Problem('4', 'zoo', 'description', 'www.codeforces.com')
@@ -44,9 +44,9 @@ class TestClasses(unittest.TestCase):
         contest_test.add_problem(problem_2)
         self.assertEqual(contest_test.problem_list[1].name, 'topcoder')
 
-    def test_case_test_add_test(self):
+    def test_test_case_add_test(self):
         problem_test = Problem('4', 'zoo', 'description', 'www.codeforces.com')
-        case_test = CaseTest('3', 'test')
+        case_test = TestCase('3', 'test')
         case_test.add_problem(problem_test)
         self.assertEqual(case_test.problem.name, 'zoo')
 

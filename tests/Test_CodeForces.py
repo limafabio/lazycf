@@ -145,5 +145,20 @@ class TestCodeForces(unittest.TestCase):
         self.assertTrue(cf.up_to_date)
         self.assertTrue(len(c.problem_list) == 7)
 
+    def test_get_problem_test_cases(self):
+        print "test get problem test cases"
+        cf = CodeForces()
+        p = cf.get_problem(768, "G")
+        inputs = []
+        inputs.append(open("aux/test_case_input", "r").read())
+        inputs.append(open("aux/test_case_input_1", "r").read())
+        outputs = []
+        outputs.append(open("aux/test_case_output", "r").read())
+        outputs.append(open("aux/test_case_output_1", "r").read())
+        for i in range(2):
+            print "checking case test " + p.test[i].input_text
+            self.assertEquals(p.test[i].input_text, inputs[i])
+            self.assertEquals(p.test[i].output_text, outputs[i])
+
 if __name__ == "__main__":
     unittest.main()
