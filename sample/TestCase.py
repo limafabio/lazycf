@@ -21,22 +21,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-from Entity import Entity
 
+class TestCase:
 
-class Problem(Entity):
+    def __init__(self, input_text, output_text):
+        self.input_text = input_text
+        self.output_text = output_text
+        self.problem = None
 
-    def __init__(self, contest_id, index, name, description, url):
-        Entity.__init__(self, str(contest_id) + index, name)
-        self.description = description
-        self.url = url
-        self.contest = None
-        self.test = []
-        self.index = index
-        self.contest_id = contest_id
-
-    def add_contest(self, contest):
-        self.contest_id = contest
-
-    def add_test(self, test):
-        self.test.append(test)
+    def add_problem(self, problem):
+        self.problem = problem
