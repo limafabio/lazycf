@@ -27,13 +27,13 @@ class LazyCF():
             except OSError:
                 print "could not create folder " + problem.index
 
-    def create_file(case_test, problem, path=None):
+    def create_file(self, case_test, problem_name, path=None):
         if path is None:
             path = os.getcwd()
-        path += '/' + problem.name
+        path += '/' + problem_name
         try:
             f_descriptor = open(path, "w+")
-            f_descriptor.write(case_test.input_text)
+            f_descriptor.write(case_test)
         except OSError:
             print "could not create a file " + case_test.name
 
