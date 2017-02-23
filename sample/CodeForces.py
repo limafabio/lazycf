@@ -2,6 +2,8 @@
 
 try:
     from urllib2 import urlopen
+    from HTMLParser import HTMLParser
+    import json   
 except ImportError:
     print ImportError
 
@@ -9,6 +11,60 @@ import os
 import json
 from Contest import Contest
 from Problem import Problem
+from TestCase import TestCase
+
+
+# this class was based on class CodeforcesProblemParser from
+# https://github.com/johnathan79717/codeforces-parser/blob/master/parse.py
+class TestCasesHTMLParser(HTMLParser):
+
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.tests = []
+        self.curTestCase = None
+        self.curData = None
+        self.dataType = "input"
+        self.is_copying = False
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'div':
+            if attrs == [('class', 'input')]:
+                self.curData = ""
+                self.dataType = 'input'
+                self.curTestCase = TestCase("", "")
+            elif attrs == [('class', 'output')]:
+                self.curData = ""
+                self.dataType = 'output'
+        elif tag == 'pre':
+            if self.curTestCase is not None:
+                self.is_copying = True
+
+    def handle_endtag(self, tag):
+        if tag == 'br':
+            if self.is_copying:
+                self.curData = self.curData + '\n'.encode('utf-8')
+                self.end_line = True
+        if tag == 'pre':
+            if self.is_copying:
+                if not self.end_line:
+                    self.curData = self.curData + '\n'.encode('utf-8')
+                if self.dataType == 'input':
+                    self.curTestCase.input_text = self.curData
+                if self.dataType == 'output':
+                    self.curTestCase.output_text = self.curData
+                    self.tests.append(self.curTestCase)
+                    self.curTestCase = None
+                self.is_copying = False
+
+    def handle_entityref(self, name):
+        if self.is_copying:
+            self.curData = self.curData + \
+                self.unescape(('&%s;' % name)).encode('utf-8')
+
+    def handle_data(self, data):
+        if self.is_copying:
+            self.curData = self.curData + data.encode('utf-8')
+            self.end_line = False
 
 
 class CodeForces:
@@ -100,9 +156,19 @@ class CodeForces:
             return self.get_problem(contest_id, pid)
         if len(r) != 1:
             return None
-        return Problem(contest_id, pid, r[0]['name'], None,
-                       source_problem + str(contest_id) +
-                       '/problem/' + pid)
+          
+        p = Problem(contest_id, pid, r[0]['name'], None,
+                    "http://codeforces.com/contest/" + str(contest_id) +
+                    "/problem/" + pid)
+        # get test cases
+        try:
+            html = urlopen(p.url.encode('utf-8')).read()
+        except:
+            print "Could not get test cases for problem " + p.name
+        parser = TestCasesHTMLParser()
+        parser.feed(html)
+        [p.add_test(t) for t in parser.tests]
+        return p
 
     def get_contest(self, contest_id):
         if not self.contest_exists(contest_id, True) and not self.up_to_date:
