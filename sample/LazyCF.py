@@ -22,9 +22,8 @@ class LazyCF():
         if path is None:
             path = os.getcwd()
         for problem in contest.problem_list:
-            path += "/" + problem.index
             try:
-                os.mkdir(path)
+                os.mkdir(path + "/" + problem.index)
             except OSError:
                 print "could not create folder " + problem.index
 

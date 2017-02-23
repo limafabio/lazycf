@@ -26,9 +26,10 @@ class TestLazyCF(unittest.TestCase):
         lazy = LazyCF()
         lazy.create_folder(contest_test)
         path = os.path.abspath('.')
-        path += "/" + contest_test.problem_list[0].index
-        self.assertTrue(os.path.isdir(path))
-        shutil.rmtree(path)
+        for folder in contest_test.problem_list:
+            self.assertTrue(os.path.isdir(path + "/" + folder.index))
+            shutil.rmtree(path + "/" + folder.index)
+
 
     '''
     def test_create_file(self):
