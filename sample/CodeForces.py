@@ -3,11 +3,12 @@
 try:
     from urllib2 import urlopen
     from HTMLParser import HTMLParser
-    import json
+    import json   
 except ImportError:
     print ImportError
 
 import os
+import json
 from Contest import Contest
 from Problem import Problem
 from TestCase import TestCase
@@ -76,6 +77,7 @@ class CodeForces:
         self.load_all_problems()
 
     def load_all_contests(self, update=False):
+        source_contest = "http://codeforces.com/api/contest.list"
         if update and os.path.isfile(self.contests_path):
             os.remove(self.contests_path)
         try:
@@ -84,7 +86,7 @@ class CodeForces:
             try:
                 print "downloading contests..."
                 self.contests = \
-                    urlopen("http://codeforces.com/api/contest.list").read()
+                    urlopen(source_contest).read()
                 f = open(self.contests_path, 'w')
                 f.write(self.contests)
                 f.close()
@@ -97,6 +99,7 @@ class CodeForces:
         print str(len(self.parsed_contests['result'])) + " contests loaded"
 
     def load_all_problems(self, update=False):
+        source_problems = "http://codeforces.com/api/problemset.problems"
         if update and os.path.isfile(self.problems_path):
             os.remove(self.problems_path)
         try:
@@ -106,7 +109,7 @@ class CodeForces:
                 print "downloading problems..."
                 self.problems = \
                     urlopen(
-                        "http://codeforces.com/api/problemset.problems").read()
+                        source_problems).read()
                 f = open(self.problems_path, 'w')
                 f.write(self.problems)
                 f.close()
@@ -144,6 +147,7 @@ class CodeForces:
         return len(fc) > 0
 
     def get_problem(self, contest_id, pid):
+        source_problem = "http://codeforces.com/contest/"
         r = list(
             filter(lambda x: x['contestId'] == contest_id and x['index'] == pid,
                    self.parsed_problems['result']['problems']))
@@ -152,6 +156,7 @@ class CodeForces:
             return self.get_problem(contest_id, pid)
         if len(r) != 1:
             return None
+          
         p = Problem(contest_id, pid, r[0]['name'], None,
                     "http://codeforces.com/contest/" + str(contest_id) +
                     "/problem/" + pid)
