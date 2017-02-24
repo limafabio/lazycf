@@ -16,7 +16,7 @@ class LazyCF():
         self.contest = code_forces.get_contest(id_contest)
 
     def verify_args(self, args):
-        self.get_contest(args.contest)
+        self.get_contest(args)
 
     def create_folder(self, contest, path=None):
         if path is None:
@@ -38,7 +38,6 @@ class LazyCF():
             print "could not create a file " + case_test.name
 
 
-
 if __name__ == '__main__':
     execute = LazyCF()
     parse = argparse.ArgumentParser()
@@ -51,4 +50,5 @@ if __name__ == '__main__':
          sys.argv[1] == "--help")):
         print args.contest
     elif len(sys.argv) > 1:
-        execute.verify_args()
+        execute.verify_args(sys.argv[1])
+        execute.create_folder(execute.contest)

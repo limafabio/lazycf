@@ -23,7 +23,7 @@ THE SOFTWARE.
 try:
     from urllib2 import urlopen
     from HTMLParser import HTMLParser
-    import json   
+    import json
 except ImportError:
     print ImportError
 
@@ -176,9 +176,9 @@ class CodeForces:
             return self.get_problem(contest_id, pid)
         if len(r) != 1:
             return None
-          
+
         p = Problem(contest_id, pid, r[0]['name'], None,
-                    "http://codeforces.com/contest/" + str(contest_id) +
+                    source_problem + str(contest_id) +
                     "/problem/" + pid)
         # get test cases
         try:
