@@ -13,7 +13,7 @@ class LazyCF():
 
     def get_contest(self, id_contest):
         code_forces = CodeForces()
-        self.contest = code_forces.get_contest(id_contest)
+        self.contest = code_forces.get_contest(int(id_contest))
 
     def verify_args(self, args):
         self.get_contest(args)
