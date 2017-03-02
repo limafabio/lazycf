@@ -23,7 +23,6 @@ THE SOFTWARE.
 try:
     from urllib2 import urlopen
     from HTMLParser import HTMLParser
-    import json   
 except ImportError:
     print ImportError
 
@@ -98,8 +97,8 @@ class CodeForces:
 
     def load_all_contests(self, update=False):
         source_contest = "http://codeforces.com/api/contest.list"
-        if update and os.path.isfile(self.contests_path):
-            os.remove(self.contests_path)
+        # if update and os.path.isfile(self.contests_path):
+        #    os.remove(self.contests_path)
         try:
             self.contests = open(self.contests_path).read()
         except:
@@ -145,9 +144,9 @@ class CodeForces:
     def update(self):
         if self.up_to_date:
             return
+        self.up_to_date = True
         self.load_all_contests(True)
         self.load_all_problems(True)
-        self.up_to_date = True
 
     def contest_exists(self, contest_id, full=False):
         if full:
@@ -176,12 +175,13 @@ class CodeForces:
             return self.get_problem(contest_id, pid)
         if len(r) != 1:
             return None
-          
+
         p = Problem(contest_id, pid, r[0]['name'], None,
-                    "http://codeforces.com/contest/" + str(contest_id) +
+                    source_problem + str(contest_id) +
                     "/problem/" + pid)
         # get test cases
         try:
+            print "getting test cases for problem " + p.name
             html = urlopen(p.url.encode('utf-8')).read()
         except:
             print "Could not get test cases for problem " + p.name
