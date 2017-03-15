@@ -77,8 +77,8 @@ class CodeForces:
 
     def load_all_contests(self, update=False):
         source_contest = "http://codeforces.com/api/contest.list"
-        # if update and os.path.isfile(self.contests_path):
-        #    os.remove(self.contests_path)
+        if update and os.path.isfile(self.contests_path):
+            os.remove(self.contests_path)
         try:
             self.contests = open(self.contests_path).read()
         except:

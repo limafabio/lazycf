@@ -1,12 +1,14 @@
-#!/usr/bin/py
+#!/usr/bin/python
+
+# Copyright 2017 Fabio Lima and Filipe CN
 
 import os
 import sys
 import shutil
 import unittest
-sys.path.append(os.path.abspath('..'))
 from sample.LazyCF import LazyCF
 from sample.CodeForces import CodeForces
+sys.path.append(os.path.abspath('..'))
 
 
 class TestLazyCF(unittest.TestCase):
