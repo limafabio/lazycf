@@ -1,4 +1,6 @@
-#!/usr/bin/py
+#!/usr/bin/python
+
+# Copyright 2017 Fabio Lima and Filipe CN
 
 import os
 import sys
