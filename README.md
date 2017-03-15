@@ -7,7 +7,7 @@ This project require python 2.7 to run. It was test in Linux enviroment, specifi
 # Example
 
 # Collaborators
-Fabio Lima
-Filipe CN
+Fabio Lima <br />
+Filipe CN <br />
 
 
