@@ -1,31 +1,15 @@
-#!/usr/bin/py
-'''
-Copyright 2017 Fabio Lima and Filipe CN
+#!/usr/bin/python
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-'''
+# Copyright 2017 Fabio Lima and Filipe CN
 
 from Entity import Entity
+
+# class to store problem
 
 
 class Problem(Entity):
 
+    # construct of class problem
     def __init__(self, contest_id, index, name, description, url):
         Entity.__init__(self, str(contest_id) + index, name)
         self.description = description
@@ -35,8 +19,10 @@ class Problem(Entity):
         self.index = index
         self.contest_id = contest_id
 
+    # add contest in attribute
     def add_contest(self, contest):
         self.contest_id = contest
 
+    # add test in attribute
     def add_test(self, test):
         self.test.append(test)

@@ -1,4 +1,6 @@
-#!/usr/bin/py
+#!/usr/bin/python
+
+# Copyright 2017 Fabio Lima and Filipe CN
 
 import os
 import sys
@@ -8,16 +10,20 @@ from CodeForces import CodeForces
 
 class LazyCF():
 
+    # construct of the class lazycf
     def __init__(self):
         self.contest = None
 
+    # get contest by id contest and set in attribute contest
     def get_contest(self, id_contest):
         code_forces = CodeForces()
         self.contest = code_forces.get_contest(int(id_contest))
 
+    # verify if the arguments are correct
     def verify_args(self, args):
         self.get_contest(args)
 
+    # create folder for each problem
     def create_folder(self, contest, path=None):
         if path is None:
             path = os.getcwd()
@@ -27,6 +33,7 @@ class LazyCF():
             except OSError:
                 print "could not create folder " + problem.index
 
+    # create a case for each problem
     def create_file(self, case_test, problem_name, path=None):
         if path is None:
             path = os.getcwd()
@@ -38,6 +45,7 @@ class LazyCF():
             print "could not create a file " + case_test.name
 
 
+# main verify the length arguments and execute the script
 if __name__ == '__main__':
     execute = LazyCF()
     parse = argparse.ArgumentParser()

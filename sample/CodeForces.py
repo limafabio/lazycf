@@ -1,25 +1,7 @@
 #!/usr/bin/python
-'''
-Copyright 2017 Fabio Lima and Filipe CN
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
+# Copyright 2017 Fabio Lima and Filipe CN
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-'''
 try:
     from urllib2 import urlopen
     from HTMLParser import HTMLParser
@@ -33,10 +15,9 @@ from Problem import Problem
 from TestCase import TestCase
 
 
-# this class was based on class CodeforcesProblemParser from
-# https://github.com/johnathan79717/codeforces-parser/blob/master/parse.py
 class TestCasesHTMLParser(HTMLParser):
 
+    # constructor of the class HTMLParser
     def __init__(self):
         HTMLParser.__init__(self)
         self.tests = []
@@ -45,6 +26,7 @@ class TestCasesHTMLParser(HTMLParser):
         self.dataType = "input"
         self.is_copying = False
 
+    # set attributes values of start tag
     def handle_starttag(self, tag, attrs):
         if tag == 'div':
             if attrs == [('class', 'input')]:
@@ -58,6 +40,7 @@ class TestCasesHTMLParser(HTMLParser):
             if self.curTestCase is not None:
                 self.is_copying = True
 
+    # set attributes values of end tag
     def handle_endtag(self, tag):
         if tag == 'br':
             if self.is_copying:
@@ -75,11 +58,13 @@ class TestCasesHTMLParser(HTMLParser):
                     self.curTestCase = None
                 self.is_copying = False
 
+    # set attribute curData with name
     def handle_entityref(self, name):
         if self.is_copying:
             self.curData = self.curData + \
                 self.unescape(('&%s;' % name)).encode('utf-8')
 
+    # set data in handle
     def handle_data(self, data):
         if self.is_copying:
             self.curData = self.curData + data.encode('utf-8')
@@ -88,6 +73,7 @@ class TestCasesHTMLParser(HTMLParser):
 
 class CodeForces:
 
+    # construct of the class CodeForces
     def __init__(self, contest_db_path='contests', problem_db_path='problems'):
         self.up_to_date = False
         self.contests_path = contest_db_path
@@ -95,10 +81,11 @@ class CodeForces:
         self.load_all_contests()
         self.load_all_problems()
 
+    # get all contest from site and write in a file
     def load_all_contests(self, update=False):
         source_contest = "http://codeforces.com/api/contest.list"
-        # if update and os.path.isfile(self.contests_path):
-        #    os.remove(self.contests_path)
+        if update and os.path.isfile(self.contests_path):
+            os.remove(self.contests_path)
         try:
             self.contests = open(self.contests_path).read()
         except:
@@ -106,9 +93,9 @@ class CodeForces:
                 print "downloading contests..."
                 self.contests = \
                     urlopen(source_contest).read()
-                f = open(self.contests_path, 'w')
-                f.write(self.contests)
-                f.close()
+                file_contest = open(self.contests_path, 'w')
+                file_contest .write(self.contests)
+                file_contest.close()
             except:
                 raise
         self.parsed_contests = json.loads(self.contests)
@@ -117,6 +104,7 @@ class CodeForces:
                 exit(1)
         print str(len(self.parsed_contests['result'])) + " contests loaded"
 
+    # load all problems in attribute problem
     def load_all_problems(self, update=False):
         source_problems = "http://codeforces.com/api/problemset.problems"
         if update and os.path.isfile(self.problems_path):
@@ -129,9 +117,9 @@ class CodeForces:
                 self.problems = \
                     urlopen(
                         source_problems).read()
-                f = open(self.problems_path, 'w')
-                f.write(self.problems)
-                f.close()
+                file_contest = open(self.problems_path, 'w')
+                file_contest.write(self.problems)
+                file_contest.close()
             except:
                 raise
         self.parsed_problems = json.loads(self.problems)
@@ -141,6 +129,8 @@ class CodeForces:
         print str(len(self.parsed_problems['result']['problems'])) \
             + " problems loaded"
 
+    # set variable up_to_date and call functions load_all_contest and
+    # load_all_problems
     def update(self):
         if self.up_to_date:
             return
@@ -148,6 +138,7 @@ class CodeForces:
         self.load_all_contests(True)
         self.load_all_problems(True)
 
+    #
     def contest_exists(self, contest_id, full=False):
         if full:
             fp = list(filter(lambda x: x['contestId'] == contest_id,
@@ -165,6 +156,7 @@ class CodeForces:
             return len(fc) > 0 and len(fp) > 0
         return len(fc) > 0
 
+    #
     def get_problem(self, contest_id, pid):
         source_problem = "http://codeforces.com/contest/"
         r = list(
@@ -190,6 +182,7 @@ class CodeForces:
         [p.add_test(t) for t in parser.tests]
         return p
 
+    #
     def get_contest(self, contest_id):
         if not self.contest_exists(contest_id, True) and not self.up_to_date:
             self.update()
